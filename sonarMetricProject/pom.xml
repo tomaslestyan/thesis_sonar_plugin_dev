@@ -93,7 +93,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <pluginKey>sonarMetricProject</pluginKey>
-                    <pluginClass>main.java.plugin.IDEMetadataPlugin</pluginClass>
+                    <pluginClass>main.java.plugin.Plugin</pluginClass>
                     <pluginName>SonarQube IDE Metadata plugin</pluginName>
                     <pluginDescription>Gathers and displays information from IDE metadata files, including project type (based on natures/facets) and dependencies.</pluginDescription>
                 </configuration>
