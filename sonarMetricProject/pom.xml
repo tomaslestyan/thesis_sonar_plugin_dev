@@ -1,174 +1,243 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>Disharmonies checker</name>
+    <groupId>tlestyan.thesis</groupId>
+    <artifactId>disharmonies</artifactId>
+    <version>0.5</version>
+  <packaging>sonar-plugin</packaging>
 
-    <modelVersion>4.0.0</modelVersion>
+  <properties>
+		<sonar.version>6.2</sonar.version>
+		<java.plugin.version>4.3.0.7717</java.plugin.version>
+		<sslr.version>1.21</sslr.version>
+		<gson.version>2.6.2</gson.version>
+	</properties>
 
-    <name>sonarMetricProject</name>
-    <groupId>deors.plugins</groupId>
-    <artifactId>metric</artifactId>
-    <version>1.0</version>
-    <packaging>sonar-plugin</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>org.sonarsource.sonarqube</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<version>${sonar.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<dependency>
+			<groupId>org.sonarsource.java</groupId>
+			<artifactId>sonar-java-plugin</artifactId>
+			<type>sonar-plugin</type>
+			<version>${java.plugin.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-        <java.version>1.8</java.version>
-        <sonarqube.version>5.1</sonarqube.version>
-        <json.version>1.0</json.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <log4j.version>1.2.16</log4j.version>
-        <xstream.version>1.4.3</xstream.version>
-
-        <junit.version>4.12</junit.version>
-
-        <jacoco.version>0.7.5.201505241946</jacoco.version>
-        <jacoco.path>${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar</jacoco.path>
-        <jacoco.utReport>${project.build.directory}/jacoco.exec</jacoco.utReport>
-        <jacoco.itReport>${project.build.directory}/jacoco.itest</jacoco.itReport>
-        <jacoco.utAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.utReport}</jacoco.utAgentConfig>
-        <jacoco.itAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.itReport}</jacoco.itAgentConfig>
-
-        <jacoco-listeners.version>3.5</jacoco-listeners.version>
-
-        <sonar.jacoco.itReportPath>${jacoco.itReport}</sonar.jacoco.itReportPath>
-        <sonar.squid.analyse.property.accessors>false</sonar.squid.analyse.property.accessors>
-        <sonar.findbugs.excludesFilters>${project.basedir}/findbugs-filter.xml</sonar.findbugs.excludesFilters>
-    </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <argLine>${jacoco.utAgentConfig}</argLine>
-                    <excludes>
-                        <exclude>**/it/*TestCase.java</exclude>
-                    </excludes>
-                    <properties>
-                        <property>
-                            <name>listener</name>
-                            <value>org.sonar.java.jacoco.JUnitListener</value>
-                        </property>
-                    </properties>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <argLine>${jacoco.itAgentConfig}</argLine>
-                    <includes>
-                        <include>**/it/*TestCase.java</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.sonar</groupId>
-                <artifactId>sonar-packaging-maven-plugin</artifactId>
-                <version>1.13</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <pluginKey>sonarMetricProject</pluginKey>
-                    <pluginClass>main.java.plugin.Plugin</pluginClass>
-                    <pluginName>SonarQube IDE Metadata plugin</pluginName>
-                    <pluginDescription>Gathers and displays information from IDE metadata files, including project type (based on natures/facets) and dependencies.</pluginDescription>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.codehaus.sonar</groupId>
-            <artifactId>sonar-plugin-api</artifactId>
-            <version>${sonarqube.version}</version>
-            <scope>provided</scope>
+		<dependency>
+			<groupId>org.sonarsource.java</groupId>
+			<artifactId>java-frontend</artifactId>
+			<version>${java.plugin.version}</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>com.google.guava</groupId>
+   	 		<artifactId>guava</artifactId>
+    		<version>20.0</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
         </dependency>
         
+		<dependency>
+			<groupId>org.sonarsource.sslr-squid-bridge</groupId>
+			<artifactId>sslr-squid-bridge</artifactId>
+			<version>2.6.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.sonar.sslr</groupId>
+					<artifactId>sslr-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.sonar</groupId>
+					<artifactId>sonar-plugin-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.sonar.sslr</groupId>
+					<artifactId>sslr-xpath</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>${json.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.sonarsource.java</groupId>
+			<artifactId>java-checks-testkit</artifactId>
+			<version>${java.plugin.version}</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>${xstream.version}</version>
-            <scope>runtime</scope>
-        </dependency> -->
+	<dependency>
+	<groupId>org.apache.httpcomponents</groupId>
+	<artifactId>httpclient</artifactId>
+	<version>4.5.2</version>
+	<exclusions>
+		<exclusion>
+			<artifactId>commons-logging</artifactId>
+			<groupId>commons-logging</groupId>
+		</exclusion>
+	</exclusions>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.googlecode.json-simple</groupId>
+		<artifactId>json-simple</artifactId>
+		<version>1.1</version>
+	</dependency>
+	
+	<dependency>
+			<groupId>org.sonarsource.sslr</groupId>
+			<artifactId>sslr-testing-harness</artifactId>
+			<version>${sslr.version}</version>
+			<scope>test</scope>
+		</dependency>
 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert</artifactId>
+			<version>1.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.30</version>
+			<scope>test</scope>
+		</dependency>
+		
         <dependency>
-            <groupId>org.codehaus.sonar</groupId>
-            <artifactId>sonar-testing-harness</artifactId>
-            <version>${sonarqube.version}</version>
-            <scope>test</scope>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.10.2.0</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.agent</artifactId>
-            <version>${jacoco.version}</version>
-            <classifier>runtime</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.sonarsource.java</groupId>
-            <artifactId>sonar-jacoco-listeners</artifactId>
-            <version>${jacoco-listeners.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.sonarsource.java</groupId>
-        	<artifactId>sonar-java-plugin</artifactId>
-        	<version>3.6</version>
-        </dependency>
-    </dependencies>
+		
+	</dependencies>
+
+  <build>
+	
+	<resources>
+     <resource>
+       <directory>src/resources</directory>
+       <targetPath>resources</targetPath>
+     </resource>
+   </resources>  
+  
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>1.17</version>
+        <extensions>true</extensions>
+          <configuration>
+                    <pluginKey>sonarMetricProject</pluginKey>
+                    <pluginClass>main.java.plugin.DisharmoniesPlugin</pluginClass>
+                    <pluginName>SonarQube Disharmonies Plugin</pluginName>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                    <sonarLintSupported>true</sonarLintSupported>
+                    <sonarQubeMinVersion>5.6</sonarQubeMinVersion>
+                    <pluginDescription> Collects disharmonies metrics </pluginDescription>
+                </configuration>
+<!--                 <dependencies> -->
+<!--                 	<dependency> -->
+<!--                 		<groupId>org.apache.commons</groupId> -->
+<!-- 						<artifactId>commons-collections4</artifactId> -->
+<!-- 						<version>4.0</version> -->
+<!-- 						<type>jar</type> -->
+<!--                 	</dependency> -->
+<!--                 </dependencies> -->
+      </plugin>
+      <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<!-- only required to run UT - these are UT dependencies -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.apache.commons</groupId>
+									<artifactId>commons-collections4</artifactId>
+									<version>4.0</version>
+									<type>jar</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>javax</groupId>
+									<artifactId>javaee-api</artifactId>
+									<version>6.0</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.springframework</groupId>
+									<artifactId>spring-webmvc</artifactId>
+									<version>4.3.3.RELEASE</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.springframework</groupId>
+									<artifactId>spring-webmvc</artifactId>
+									<version>4.3.3.RELEASE</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.springframework</groupId>
+									<artifactId>spring-web</artifactId>
+									<version>4.3.3.RELEASE</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.springframework</groupId>
+									<artifactId>spring-context</artifactId>
+									<version>4.3.3.RELEASE</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/test-jars</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+     </plugins>
+  </build>
 
 </project>

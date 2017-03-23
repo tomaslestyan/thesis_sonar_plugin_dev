@@ -1,0 +1,40 @@
+<rules>
+<!-- 	Brain method detection using exact values -->
+  <rule>
+    <key>brainMethodStatic</key>
+    <name>BrainMethod (static values)</name>
+    <description>
+      Brain Methods tend to centralize the functionality of a class, in the same way as a God Class centralizes the functionality of an entire subsystem, or sometimes even a whole system.
+    </description>
+    <severity>MAJOR</severity>
+    <type>CODE_SMELL</type>
+    <scope>METHOD</scope>
+    <disharmonyDetection>
+    	<and>
+     		<metric name="loc" compare="&gt;" value="25" modifier= "/2"/>
+    		<metric name="noav" compare="&gt;" value="5"/>
+     		<metric name="cyclo" compare="&gt;=" value="10" />
+    		<metric name="maxnesting" compare="&gt;=" value="3"/>
+    	</and>
+    </disharmonyDetection>
+  </rule>
+  <!-- 	Brain method detection using treshold semantics -->
+  <rule>
+    <key>brainMethodDynamic</key>
+    <name>BrainMethod (dynamic values)</name>
+    <description>
+      Brain Methods tend to centralize the functionality of a class, in the same way as a God Class centralizes the functionality of an entire subsystem, or sometimes even a whole system.
+    </description>
+    <severity>MAJOR</severity>
+    <type>CODE_SMELL</type>
+    <scope>METHOD</scope>
+    <disharmonyDetection>
+    	<and>
+     		<metric name="loc" compare="&gt;" semantic="HIGH" modifier= "/2"/>
+			<metric name="noav" compare="&gt;" semantic="MANY"/> -->
+     		<metric name="cyclo" compare="&gt;=" semantic="HIGH" />
+    		<metric name="maxnesting" compare="&gt;=" value="3"/>
+    	</and>
+    </disharmonyDetection>
+  </rule>
+</rules>
