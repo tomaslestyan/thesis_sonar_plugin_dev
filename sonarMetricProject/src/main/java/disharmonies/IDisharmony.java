@@ -1,6 +1,6 @@
 /**
  * The MIT License (MIT)
- * Copyright (c) 2016 Tomas Lestyan
+ * Copyright (c) 2016 FI MUNI
  */
 package main.java.disharmonies;
 

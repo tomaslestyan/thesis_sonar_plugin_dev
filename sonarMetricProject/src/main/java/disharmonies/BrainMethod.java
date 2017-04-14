@@ -3,20 +3,17 @@
  */
 package main.java.disharmonies;
 
+import java.util.Collection;
+
 import org.sonar.check.Rule;
 import org.sonar.plugins.java.api.JavaFileScannerContext;
 import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
 import org.sonar.plugins.java.api.tree.MethodTree;
 
-import main.java.disharmonies.metrics.AMetric.CompareOperator;
-import main.java.disharmonies.metrics.MetricCheck;
+import main.java.components.ComponentFactory;
+import main.java.components.IComponent;
 import main.java.tresholds.ITresholds;
-import main.java.tresholds.PercentileSemantics;
 import main.java.tresholds.TresholdFactory;
-import main.java.visitors.ComplexityVisitor;
-import main.java.visitors.LinesOfCodeVisitor;
-import main.java.visitors.MaxNestingVisitor;
-import main.java.visitors.VariableVisitor;
 
 /**
  * Class for detecing brain method
@@ -30,6 +27,7 @@ public class BrainMethod extends BaseTreeVisitor implements IDisharmony {
 	static final String BRAIN_METHOD_DESCRIPTION = "Brain Methods tend to centralize the functionality of a class, in the same way as a God Class centralizes the functionality of an entire subsystem, or sometimes even a whole system.";
 	private JavaFileScannerContext context;
 	private final ITresholds tresholds = TresholdFactory.getTresholds();
+	private Collection<IComponent> components = ComponentFactory.getComponents();
 
 	/* (non-Javadoc)
 	 * @see main.java.disharmonies.IDisharmony#getKey()
@@ -78,13 +76,18 @@ public class BrainMethod extends BaseTreeVisitor implements IDisharmony {
 	 */
 	@Override
 	public void visitMethod(MethodTree tree) {
-		boolean locAnomaly = new MetricCheck(tree, tresholds, new LinesOfCodeVisitor()).evaluate(CompareOperator.GREATER_THAN, PercentileSemantics.HIGH, "/2");
-		boolean complexityAnomaly = new MetricCheck(tree, tresholds, new ComplexityVisitor()).evaluate(CompareOperator.GREATER_OR_EQUAL_TO, PercentileSemantics.HIGH);
-		boolean variablesAnomaly = new MetricCheck(tree, tresholds, new VariableVisitor()).evaluate(CompareOperator.GREATER_THAN, PercentileSemantics.MANY);
-		boolean nestingAnomaly = new MetricCheck(tree, tresholds, new MaxNestingVisitor()).evaluate(CompareOperator.GREATER_OR_EQUAL_TO, 3);
-		if (locAnomaly && complexityAnomaly && variablesAnomaly && nestingAnomaly) {
-			context.reportIssue(this, tree, "Potentional brain method");
-		}
+		//		String fileKey = context.getFileKey() + "->" + tree.simpleName();
+		//		Optional<IComponent> optional = components.stream()
+		//				.filter(x -> fileKey.contains(x.getID())) 
+		//				.findFirst();
+		//		IComponent methodComponent = (optional.isPresent()) ? optional.get() : null;
+		//		boolean locAnomaly = new MetricCheck(tree, tresholds, new LinesOfCodeVisitor()).evaluate(CompareOperator.GREATER_THAN, PercentileSemantics.HIGH, "/2");
+		//		boolean complexityAnomaly = new MetricCheck(tree, tresholds, new ComplexityVisitor()).evaluate(CompareOperator.GREATER_OR_EQUAL_TO, PercentileSemantics.HIGH);
+		//		boolean variablesAnomaly = new MetricCheck(tree, tresholds, new VariableVisitor()).evaluate(CompareOperator.GREATER_THAN, PercentileSemantics.MANY);
+		//		boolean nestingAnomaly = new MetricCheck(tree, tresholds, new MaxNestingVisitor()).evaluate(CompareOperator.GREATER_OR_EQUAL_TO, 3);
+		//		if (locAnomaly && complexityAnomaly && variablesAnomaly && nestingAnomaly) {
+		//			context.reportIssue(this, tree, "Potentional brain method");
+		//		}
 		super.visitMethod(tree);
 	}
 

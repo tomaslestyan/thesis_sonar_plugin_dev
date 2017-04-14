@@ -30,8 +30,9 @@ public class Checks implements CheckRegistrar {
 	@SuppressWarnings("unchecked")
 	public static Class<? extends JavaCheck>[] checkClasses() {
 		return new Class [] {
-			BrainMethod.class,
-			TreeScanner.class
+				BrainMethod.class,
+				TreeScanner.class,
+				FileVisitor.class
 		};
 	}
 }

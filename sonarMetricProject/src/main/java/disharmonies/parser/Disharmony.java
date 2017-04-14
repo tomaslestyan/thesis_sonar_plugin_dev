@@ -12,7 +12,6 @@ import org.sonar.plugins.java.api.tree.Tree;
 import main.java.disharmonies.IDisharmony;
 import main.java.disharmonies.detection.DisharmonyDetection;
 import main.java.tresholds.ITresholds;
-import main.java.visitors.VisitorScope;
 
 /**
  * Parsed XML disharmony
@@ -100,16 +99,15 @@ public class Disharmony implements IDisharmony{
 	 * @return <code>true</code> if disharmony detected, <code>false</code> otherwise
 	 */
 	public boolean disharmonyDetected(Tree tree, ITresholds tresholds) {
-		VisitorScope scopeEnum = VisitorScope.getScope(scope);
 		boolean result;
-		switch (scopeEnum) {
-		case METHOD:
+		switch (scope) {
+		case "method":
 			result = (tree instanceof MethodTree) ? detection.disharmonyDetected(tree, tresholds) : false;
 			break;
-		case CLASS:
+		case "class":
 			result = (tree instanceof ClassTree) ? detection.disharmonyDetected(tree, tresholds) : false;
 			break;
-		case ALL:
+		case "all":
 			result = ((tree instanceof ClassTree) || (tree instanceof MethodTree)) ? detection.disharmonyDetected(tree, tresholds) : false;
 			break;
 		default:

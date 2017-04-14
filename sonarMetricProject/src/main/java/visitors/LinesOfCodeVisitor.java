@@ -30,8 +30,8 @@ public class LinesOfCodeVisitor extends ADisharmonyVisitor {
 	 * @see main.java.visitors.ADisharmonyVisitor#getScope()
 	 */
 	@Override
-	public VisitorScope getScope() {
-		return VisitorScope.ALL;
+	public Scope getScope() {
+		return Scope.ALL;
 	}
 
 	/* (non-Javadoc)

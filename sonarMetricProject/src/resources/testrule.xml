@@ -8,7 +8,7 @@
     </description>
     <severity>MAJOR</severity>
     <type>CODE_SMELL</type>
-    <scope>METHOD</scope>
+    <scope>2</scope>
     <disharmonyDetection>
     	<and>
      		<metric name="loc" compare="&gt;" value="25" modifier= "/2"/>
@@ -27,7 +27,7 @@
     </description>
     <severity>MAJOR</severity>
     <type>CODE_SMELL</type>
-    <scope>METHOD</scope>
+    <scope>2</scope>
     <disharmonyDetection>
     	<and>
      		<metric name="loc" compare="&gt;" semantic="HIGH" modifier= "/2"/>

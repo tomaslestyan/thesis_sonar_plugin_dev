@@ -38,8 +38,8 @@ public class ComplexityVisitor extends ADisharmonyVisitor {
 	 * @see main.java.visitors.ADisharmonyVisitor#getScope()
 	 */
 	@Override
-	public VisitorScope getScope() {
-		return VisitorScope.METHOD;
+	public Scope getScope() {
+		return Scope.METHOD;
 	}
 
 	/* (non-Javadoc)

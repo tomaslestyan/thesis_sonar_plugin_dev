@@ -1,5 +1,6 @@
 /**
- *
+ * The MIT License (MIT)
+ * Copyright (c) 2016 Tomas Lestyan
  */
 package main.java.plugin;
 
@@ -11,22 +12,20 @@ import org.sonar.plugins.java.api.tree.ClassTree;
 import org.sonar.plugins.java.api.tree.MethodTree;
 
 /**
+ * TODO
  * @author Tomas Lestyan
  */
-@Rule(key = "internal", name="internal", description="blank rule")
-public class TreeScanner extends BaseTreeVisitor implements JavaFileScanner {
+@Rule(key = "framework", name="framework", description="blank rule")
+public class FileVisitor extends BaseTreeVisitor implements JavaFileScanner{
 
 
 	private JavaFileScannerContext context;
 
-	/* (non-Javadoc)
-	 * @see org.sonar.plugins.java.api.JavaFileScanner#scanFile(org.sonar.plugins.java.api.JavaFileScannerContext)
-	 */
+
 	@Override
 	public void scanFile(JavaFileScannerContext context) {
 		this.context = context;
 		scan(context.getTree());
-		DisharmoniesContextSingleton.getInstance().addTree(context.getTree(), context.getFile());
 	}
 
 	/* (non-Javadoc)
@@ -34,7 +33,8 @@ public class TreeScanner extends BaseTreeVisitor implements JavaFileScanner {
 	 */
 	@Override
 	public void visitClass(ClassTree tree) {
-		context.reportIssue(this, tree, "Class visited");
+		int line = tree.declarationKeyword().line();
+		//		new SonarDbClient().saveComponent(context.getFileKey() + "->" + tree.simpleName().name(), context.getFileKey(), line, 100);
 		super.visitClass(tree);
 	}
 
@@ -43,7 +43,7 @@ public class TreeScanner extends BaseTreeVisitor implements JavaFileScanner {
 	 */
 	@Override
 	public void visitMethod(MethodTree tree) {
-		context.reportIssue(this, tree, "Method visited");
-		super.visitMethod(tree);
+		int line = tree.openParenToken().line();
 	}
+
 }
