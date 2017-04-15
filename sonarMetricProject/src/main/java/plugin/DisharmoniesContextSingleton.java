@@ -4,23 +4,13 @@
  */
 package main.java.plugin;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sonar.plugins.java.api.tree.Tree;
-
-import com.google.common.collect.ImmutableMap;
-
 import main.java.disharmonies.parser.Disharmony;
-import main.java.visitors.ADisharmonyVisitor;
-import main.java.visitors.ComplexityVisitor;
-import main.java.visitors.LinesOfCodeVisitor;
-import main.java.visitors.MaxNestingVisitor;
-import main.java.visitors.VariableVisitor;
 
 /**
  * Singleton for holding the context of the disharmonies checking plugin
@@ -28,24 +18,12 @@ import main.java.visitors.VariableVisitor;
  */
 public class DisharmoniesContextSingleton {
 
-	  /** The singleton instance*/
+	/** The singleton instance*/
 	private static volatile DisharmoniesContextSingleton INSTANCE;
 	/** TODO */
 	private final Map<String, Disharmony> rules = new HashMap<>();
 	/** TODO */
-	private final Map<Tree, File> fileTrees = new HashMap<>();
-	/** TODO */
-	private Map<String, ADisharmonyVisitor> visitors;
 	private URL xmlRulesLocation;
-
-	/**
-	 * Constructor
-	 * Not allowing instance creation!
-	 */
-	private  DisharmoniesContextSingleton() {
-		initializeVisitors();
-	}
-
 
 	/**
 	 * TODO
@@ -84,50 +62,6 @@ public class DisharmoniesContextSingleton {
 	public void addDisharmonyRules(Collection<Disharmony> disharmonies) {
 		disharmonies.forEach(x -> addDisharmonyRule(x));
 	}
-
-	/**
-	 * TODO
-	 * @param tree
-	 * @param file
-	 */
-	public void addTree(Tree tree, File file) {
-		fileTrees.put(tree, file);
-	}
-
-	/**
-	 * TODO
-	 * @return
-	 */
-	public Map<Tree, File> getFileTrees() {
-		return Collections.unmodifiableMap(fileTrees);
-	}
-
-	/**
-	 * @return the visitors
-	 */
-	public Map<String, ADisharmonyVisitor> getVisitors() {
-		return visitors;
-	}
-
-	/**
-	 * @return the visitors
-	 */
-	public ADisharmonyVisitor getVisitor(String id) {
-		return visitors.get(id);
-	}
-
-	/**
-	 * TODO
-	 */
-	private void initializeVisitors() {
-		visitors = ImmutableMap.<String, ADisharmonyVisitor> builder()
-		.put(LinesOfCodeVisitor.KEY, new LinesOfCodeVisitor())
-		.put(MaxNestingVisitor.KEY, new MaxNestingVisitor())
-		.put(VariableVisitor.KEY, new VariableVisitor())
-		.put(ComplexityVisitor.KEY, new ComplexityVisitor())
-		.build();
-	}
-
 
 	/**
 	 * @return the xmlRules URL

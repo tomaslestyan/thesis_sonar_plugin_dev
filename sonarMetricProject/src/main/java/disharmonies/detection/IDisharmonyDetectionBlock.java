@@ -4,9 +4,9 @@
  */
 package main.java.disharmonies.detection;
 
-import org.sonar.plugins.java.api.tree.Tree;
+import java.util.Map;
 
-import main.java.tresholds.ITresholds;
+import main.java.tresholds.IThresholds;
 
 /**
  * Interface of the detection block which can be for instance a metric or a binary operator aggregating some metrics
@@ -17,9 +17,9 @@ public interface IDisharmonyDetectionBlock {
 
 	/**
 	 * Evaluate the detection block
-	 * @param tree
+	 * @param measures
 	 * @param tresholds
 	 * @return <code>true</code> if disharmony detectedion succeded, <code>false</code> otherwise
 	 */
-	public boolean evaluate(Tree tree, ITresholds tresholds);
+	public boolean evaluate(Map<String, Integer> measures, IThresholds tresholds);
 }

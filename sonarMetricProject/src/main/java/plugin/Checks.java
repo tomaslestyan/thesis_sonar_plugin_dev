@@ -31,8 +31,6 @@ public class Checks implements CheckRegistrar {
 	public static Class<? extends JavaCheck>[] checkClasses() {
 		return new Class [] {
 				BrainMethod.class,
-				TreeScanner.class,
-				FileVisitor.class
 		};
 	}
 }

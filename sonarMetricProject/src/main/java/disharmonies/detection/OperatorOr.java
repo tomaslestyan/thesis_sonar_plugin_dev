@@ -4,11 +4,11 @@
  */
 package main.java.disharmonies.detection;
 
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.sonar.plugins.java.api.tree.Tree;
-
-import main.java.tresholds.ITresholds;
+import main.java.tresholds.IThresholds;
 
 /**
  * Apperator representing n-ary OR operation
@@ -17,17 +17,14 @@ import main.java.tresholds.ITresholds;
 @XmlRootElement(name="or")
 public class OperatorOr extends ABinaryOperator {
 
-	public static final String OR = "or";
-
-
 	/* (non-Javadoc)
 	 * @see main.java.disharmonies.detection.ABinaryOperator#evaluate(org.sonar.plugins.java.api.tree.Tree, main.java.tresholds.Tresholds)
 	 */
 	@Override
-	public boolean evaluate(Tree tree, ITresholds tresholds) {
+	public boolean evaluate(Map<String, Integer> measures, IThresholds tresholds) {
 		boolean result = true;
 		for (IDisharmonyDetectionBlock block : getChildren()) {
-			result = block.evaluate(tree, tresholds) || result;
+			result = block.evaluate(measures, tresholds) || result;
 		}
 		return result;
 	}

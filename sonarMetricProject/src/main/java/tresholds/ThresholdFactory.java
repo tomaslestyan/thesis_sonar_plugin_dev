@@ -8,19 +8,19 @@ package main.java.tresholds;
  * Factory to get the treshold holder object
  * @author Tomas Lestyan
  */
-public class TresholdFactory {
+public class ThresholdFactory {
 
 	private static String whichTresholdsToUse = "static"; //not implemented yet
-	private static  StaticTresholds STATIC_TRESHOLDS= new StaticTresholds();
+	private static  StaticThresholds STATIC_TRESHOLDS= new StaticThresholds();
 
 	/**
 	 * Constructor
 	 */
-	private TresholdFactory() {
+	private ThresholdFactory() {
 		// do not allow create instances
 	}
 
-	public static ITresholds getTresholds() {
+	public static IThresholds getTresholds() {
 		//TODO
 		return STATIC_TRESHOLDS;
 	}

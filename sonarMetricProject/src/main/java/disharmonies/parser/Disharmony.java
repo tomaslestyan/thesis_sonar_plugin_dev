@@ -1,17 +1,15 @@
 package main.java.disharmonies.parser;
 
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.sonar.plugins.java.api.tree.ClassTree;
-import org.sonar.plugins.java.api.tree.MethodTree;
-import org.sonar.plugins.java.api.tree.Tree;
-
 import main.java.disharmonies.IDisharmony;
 import main.java.disharmonies.detection.DisharmonyDetection;
-import main.java.tresholds.ITresholds;
+import main.java.tresholds.IThresholds;
 
 /**
  * Parsed XML disharmony
@@ -94,28 +92,12 @@ public class Disharmony implements IDisharmony{
 
 	/**
 	 * Check if the given disharmony is detected on given java tree with usage of given tresholds
-	 * @param tree
+	 * @param measures 
 	 * @param tresholds
 	 * @return <code>true</code> if disharmony detected, <code>false</code> otherwise
 	 */
-	public boolean disharmonyDetected(Tree tree, ITresholds tresholds) {
-		boolean result;
-		switch (scope) {
-		case "method":
-			result = (tree instanceof MethodTree) ? detection.disharmonyDetected(tree, tresholds) : false;
-			break;
-		case "class":
-			result = (tree instanceof ClassTree) ? detection.disharmonyDetected(tree, tresholds) : false;
-			break;
-		case "all":
-			result = ((tree instanceof ClassTree) || (tree instanceof MethodTree)) ? detection.disharmonyDetected(tree, tresholds) : false;
-			break;
-		default:
-			throw new IllegalArgumentException(scope + " is not allowed scope.");
-		}
-		detection.disharmonyDetected(tree, tresholds);
-		return result;
-
+	public boolean disharmonyDetected(Map<String, Integer> measures, IThresholds tresholds) {
+		return detection.disharmonyDetected(measures, tresholds);
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

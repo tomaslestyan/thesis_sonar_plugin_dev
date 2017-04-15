@@ -7,10 +7,10 @@ package main.java.tresholds;
 import org.sonar.plugins.java.api.tree.Tree;
 
 /**
- * Interface of tresholds handling classes
+ * Interface of thresholds handling classes
  * @author Tomas Lestyan
  */
-public interface ITresholds {
+public interface IThresholds {
 
 	/**
 	 * Get the default treshold value
@@ -20,7 +20,7 @@ public interface ITresholds {
 	public int getTresholdValueOf(String key);
 
 	/**
-	 * Get the default treshold value bz percentile semantics
+	 * Get the default threshold value by percentile semantics
 	 * @see PercentileSemantics
 	 * @param key
 	 * @param percentile

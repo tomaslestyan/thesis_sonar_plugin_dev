@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Plugin;
 
-import main.java.disharmonies.metrics.CustomMetrics;
 import main.java.disharmonies.parser.Disharmony;
 import main.java.disharmonies.parser.DisharmonyParser;
 
@@ -48,10 +47,7 @@ public class DisharmoniesPlugin implements Plugin {
 	public void define(Context context) {
 		context.addExtensions(Checks.class,
 				DisharmoniesRules.class,
-				DisharmoniesSensor.class,
-				CustomMetrics.class,
-				DisharmoniesComputer.class,
-				Widget.class);
+				DisharmoniesSensor.class);
 	}
 
 }

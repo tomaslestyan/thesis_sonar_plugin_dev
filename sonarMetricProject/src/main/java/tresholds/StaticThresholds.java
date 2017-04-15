@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * @author Tomas Lestyan
  */
-public class StaticTresholds implements ITresholds {
+public class StaticThresholds implements IThresholds {
 	private final Map<String, Integer> tresholds = ImmutableMap.<String, Integer>builder().
 		      put(CLASS_LOC_HIGH, 50).
 		      put(CYCLO_HIGH, 10).

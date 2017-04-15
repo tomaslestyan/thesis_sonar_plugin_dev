@@ -11,7 +11,7 @@ import org.sonar.plugins.java.api.JavaFileScannerContext;
  * Interface of disharmony definition
  * @author Tomas Lestyan
  */
-public interface IDisharmony extends JavaFileScanner{
+public interface IDisharmony extends JavaFileScanner {
 
 	/**
 	 * @return the key of the disharmony. Must be unique in repository.

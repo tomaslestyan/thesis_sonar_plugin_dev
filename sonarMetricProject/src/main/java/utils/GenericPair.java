@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 /**
  * Class to represent pair of values
  * @author Tomas Lestyan
+ * @param <L> 
+ * @param <R> 
  */
 public class GenericPair<L, R> {
 	Entry<L,R> pair;
@@ -63,7 +65,7 @@ public class GenericPair<L, R> {
 		if (!(obj instanceof GenericPair)) {
 			return false;
 		}
-		GenericPair other = (GenericPair) obj;
+		GenericPair<L, R> other = (GenericPair<L, R>) obj;
 		if (!other.getLeft().equals(this.getLeft())) {
 			return false;
 		}

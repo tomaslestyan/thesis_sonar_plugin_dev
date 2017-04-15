@@ -24,7 +24,7 @@ import main.java.utils.JsonUtils;
  * TODO
  * @author Tomas Lestyan
  */
-public class GlobalTresholds implements ITresholds {
+public class GlobalThresholds implements IThresholds {
 
 	HttpClient client = new HttpClient();
 	Collection<String> tresholdBuffer = new ArrayList<>();

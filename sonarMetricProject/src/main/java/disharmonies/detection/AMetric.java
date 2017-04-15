@@ -1,24 +1,20 @@
-package main.java.disharmonies.metrics;
+package main.java.disharmonies.detection;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.plugins.java.api.tree.ClassTree;
-import org.sonar.plugins.java.api.tree.MethodTree;
-import org.sonar.plugins.java.api.tree.Tree;
-
-import main.java.visitors.ADisharmonyVisitor;
 
 /**
  * Abstract class for metrics definitions
  * @author Tomas Lestyan
  */
+//TODO Separate helper classes and delete this one
 public abstract class AMetric {
 
-	 /** The logger object */
-     Logger log = LoggerFactory.getLogger(this.getClass());
+	/** The logger object */
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Compare value to trehold  value
@@ -47,41 +43,6 @@ public abstract class AMetric {
 			break;
 		default:
 			throw new IllegalArgumentException(operator + " is not valid compare operator. Use one of the following compare operators '<', '>', '<=', '>=' or '==' ");
-		}
-		return result;
-	}
-
-	/**
-	 * @param tree
-	 * @param visitor
-	 * @return the result of the metric on given Java tree
-	 */
-	public int getResult(Tree tree, ADisharmonyVisitor visitor) {
-		int result = 0;
-		if (visitor != null) {
-			switch (visitor.getScope()) {
-			case METHOD:
-				if (tree instanceof MethodTree) {
-					visitor.scanMethod((MethodTree) tree);
-					result = visitor.getResult();
-				}
-				break;
-			case CLASS:
-				if (tree instanceof ClassTree) {
-					visitor.scanClass((ClassTree) tree);
-					result = visitor.getResult();
-				}
-				break;
-			default:
-				if (tree instanceof MethodTree) {
-					visitor.scanMethod((MethodTree) tree);
-					result = visitor.getResult();
-				} else if (tree instanceof ClassTree) {
-					visitor.scanClass((ClassTree) tree);
-					result = visitor.getResult();
-				}
-				break;
-			}
 		}
 		return result;
 	}
@@ -116,25 +77,25 @@ public abstract class AMetric {
 			return value;
 		}
 
-		 /**
+		/**
 		 * @return the string value of the operator
 		 */
 		public String getValue() {
-		        return value;
-		    }
+			return value;
+		}
 
-		 /**
+		/**
 		 * @param value
 		 * @return get the operator for string value
 		 * @throws IllegalArgumentException if not valid operator string given
 		 */
 		public static CompareOperator getOperator(String value) {
-		        for(CompareOperator operator : values())
-		            if (operator.getValue().equalsIgnoreCase(value)) {
-		            	return operator;
-		            }
-		        throw new IllegalArgumentException();
-		    }
+			for(CompareOperator operator : values())
+				if (operator.getValue().equalsIgnoreCase(value)) {
+					return operator;
+				}
+			throw new IllegalArgumentException();
+		}
 	}
 
 	public class Modifier {

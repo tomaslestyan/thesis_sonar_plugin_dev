@@ -14,7 +14,7 @@ import main.java.utils.GenericPair;
  * Tresholds stored in local database
  * @author Tomas Lestyan
  */
-public class LocalTresholds implements ITresholds {
+public class LocalThresholds implements IThresholds {
 	/** The logger object */
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private final DerbyClient client = new DerbyClient();

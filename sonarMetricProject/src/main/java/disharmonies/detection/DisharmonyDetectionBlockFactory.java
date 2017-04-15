@@ -9,8 +9,6 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-import main.java.disharmonies.metrics.XmlMetric;
-
 /**
  * Factory for parsing of and, or and metric tags to coresponding objects
  * @author Tomas Lestyan

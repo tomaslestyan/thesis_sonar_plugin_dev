@@ -3,6 +3,9 @@
  */
 package main.java.plugin;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -38,19 +41,19 @@ public class DisharmoniesRules implements RulesDefinition {
 	 */
 	@Override
 	public void define(Context context) {
-		NewRepository repository = context.createRepository(REPOSITORY, "java").setName("Test Rule repository");
+		NewRepository repository = context.createRepository(REPOSITORY, "java").setName("Disharmonies Rules repository");
 		new AnnotationBasedRulesDefinition(repository, Java.KEY).addRuleClasses(false, false, Arrays.asList(Checks.checkClasses()));
 		repository.done();
-		//		InputStream is = null;
-		//		try {
-		//			//load rules by sonarqube
-		//			is = contextSingleton.getXmlRulesLocation().openStream();
-		//			xmlLoader.load(repository, is, Charset.defaultCharset());
-		//			is.close();
-		//		} catch (IOException e) {
-		//			log.warn("Rules from xml not loaded properly", e);
-		//		}
-		//		repository.done();
+		InputStream is = null;
+		try {
+			//load rules by sonarqube
+			is = contextSingleton.getXmlRulesLocation().openStream();
+			xmlLoader.load(repository, is, Charset.defaultCharset());
+			is.close();
+		} catch (IOException e) {
+			log.warn("Rules from xml not loaded properly", e);
+		}
+		repository.done();
 	}
 
 }

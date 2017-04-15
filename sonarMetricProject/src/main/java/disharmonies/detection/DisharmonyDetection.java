@@ -5,14 +5,13 @@
 package main.java.disharmonies.detection;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.sonar.plugins.java.api.tree.Tree;
-
-import main.java.tresholds.ITresholds;
+import main.java.tresholds.IThresholds;
 
 /**
  * Detection of the disharmonies according to given metrics
@@ -26,11 +25,11 @@ public class DisharmonyDetection {
 
 	/**
 	 * Detect if given tree has a disharmony
-	 * @param tree the tree which will be visited
+	 * @param measures the tree which will be visited
 	 * @param tresholds the treshold values
 	 * @return <code>true</code> if disharmony is detected, <code>false</code> otherwise
 	 */
-	public <T> boolean disharmonyDetected(Tree tree, ITresholds tresholds) {
+	public <T> boolean disharmonyDetected(Map<String, Integer> measures, IThresholds tresholds) {
 		boolean result = false;
 		if (children.size() != 1) {
 			throw new IllegalArgumentException("Disharmony detection expects exactly one child tag from following ones : and, or, condition");
@@ -40,7 +39,7 @@ public class DisharmonyDetection {
 			T value = ((JAXBElement<T>) childObject).getValue();
 			if (value instanceof IDisharmonyDetectionBlock) {
 				IDisharmonyDetectionBlock base = (IDisharmonyDetectionBlock) value;
-				result = base.evaluate(tree, tresholds);
+				result = base.evaluate(measures, tresholds);
 			}
 		}
 		return result;
