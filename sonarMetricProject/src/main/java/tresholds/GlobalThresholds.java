@@ -4,21 +4,17 @@
  */
 package main.java.tresholds;
 
-import static main.java.tresholds.TresholdRegister.CLASS_LOC_HIGH;
-import static main.java.tresholds.TresholdRegister.CYCLO_HIGH;
-import static main.java.tresholds.TresholdRegister.MAXNESTING_SEVERAL;
-import static main.java.tresholds.TresholdRegister.NOAV_MANY;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.sonar.plugins.java.api.tree.Tree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
-
-import main.java.tresholds.clients.HttpClient;
-import main.java.utils.JsonUtils;
+import main.java.framework.api.Database;
+import main.java.framework.api.metrics.MetricsRegister;
 
 /**
  * TODO
@@ -26,54 +22,62 @@ import main.java.utils.JsonUtils;
  */
 public class GlobalThresholds implements IThresholds {
 
-	HttpClient client = new HttpClient();
-	Collection<String> tresholdBuffer = new ArrayList<>();
+	/** The singleton instance*/
+	private static volatile GlobalThresholds INSTANCE;
+	/** The logger object */
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	/** Sorted measures grouped by their parent metrics */
+	Map<String, List<Integer>> sortedMeasures;
+
+	/**
+	 * TODO
+	 * @return
+	 */
+	public static GlobalThresholds getInstance() {
+		if (INSTANCE  != null ) return INSTANCE;
+		synchronized (GlobalThresholds.class) {
+			if (INSTANCE == null ) {
+				INSTANCE = new GlobalThresholds();
+			}
+		}
+		return INSTANCE;
+	}
+
+	private GlobalThresholds() {
+		long timeBefore = System.currentTimeMillis();
+		Map<String, List<Integer>> measures = Database.getMeasures(MetricsRegister.getFrameworkMetrics().stream().map(x -> x.getKey()).collect(Collectors.toList()));
+		this.sortedMeasures = getSortedMeasures(measures);
+		long timeAfter = System.currentTimeMillis();
+		log.info(String.format("Retrieving tresholds from DB taken %d ms", timeBefore - timeAfter ));
+	}
+
+	private Map<String, List<Integer>> getSortedMeasures(Map<String, List<Integer>> measures) {
+		Map<String, List<Integer>> result = new HashMap<>();
+		measures.forEach((k, v) -> {
+			Collections.sort(v);
+			result.put(k, v);
+		});
+		return result;
+	}
 
 	/* (non-Javadoc)
 	 * @see main.java.tresholds.Tresholds#getTresholdValueOf(java.lang.String)
 	 */
 	@Override
 	public int getTresholdValueOf(String metricID) {
-		//TODO just for test, needs to be implemented
-		Map<String, Integer> tresholds = ImmutableMap.<String, Integer>builder().
-			      put(CLASS_LOC_HIGH, 50).
-			      put(CYCLO_HIGH, 10).
-			      put(MAXNESTING_SEVERAL, 3).
-			      put(NOAV_MANY, 5).
-			      build();
-		Integer treshold = tresholds.get(metricID);
-		if (treshold != null) {
-			return treshold.intValue();
-		}
-		return -1;
-	}
-
-	/* (non-Javadoc)
-	 * @see main.java.tresholds.ITresholds#saveTresholdValues(java.util.Map)
-	 */
-	@Override
-	public boolean saveTresholdValues() {
-		boolean saved = client.postValue(JsonUtils.createJsonArray(tresholdBuffer));
-		if (saved) {
-			tresholdBuffer.clear();
-		}
-		return saved;
-	}
-
-	/* (non-Javadoc)
-	 * @see main.java.tresholds.ITresholds#saveTresholdValue(org.sonar.plugins.java.api.tree.Tree, java.lang.String, int)
-	 */
-	@Override
-	public void saveTresholdValue(Tree tree, String key, int value) {
-//		tresholdBuffer.add(JsonUtils.createMetricValuePostJson(key, value));
+		return getTresholdValueOf(metricID, PercentileSemantics.AVERAGE.getValue()); 
 	}
 
 	/* (non-Javadoc)
 	 * @see main.java.tresholds.ITresholds#getTresholdValueOf(java.lang.String, double)
 	 */
 	@Override
-	public int getTresholdValueOf(String key, double percentile) {
-//		return client.getValue(JsonUtils.createMetricValueGetJson(key, percentile));
+	public int getTresholdValueOf(String metricID, double percentile) {
+		List<Integer> measures = sortedMeasures.get(metricID);
+		if ((measures != null) && !measures.isEmpty()) {
+			int index = (int) (measures.size() * percentile);
+			return measures.get(index);
+		}
 		return -1;
 	}
 }

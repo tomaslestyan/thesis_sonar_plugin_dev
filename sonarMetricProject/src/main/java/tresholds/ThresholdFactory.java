@@ -5,13 +5,12 @@
 package main.java.tresholds;
 
 /**
- * Factory to get the treshold holder object
+ * Factory to get the threshold holder object
  * @author Tomas Lestyan
  */
 public class ThresholdFactory {
 
-	private static String whichTresholdsToUse = "static"; //not implemented yet
-	private static  StaticThresholds STATIC_TRESHOLDS= new StaticThresholds();
+	private static String whichThresholdsToUse = "global"; //not implemented yet
 
 	/**
 	 * Constructor
@@ -20,8 +19,8 @@ public class ThresholdFactory {
 		// do not allow create instances
 	}
 
-	public static IThresholds getTresholds() {
+	public static IThresholds getThresholds() {
 		//TODO
-		return STATIC_TRESHOLDS;
+		return GlobalThresholds.getInstance();
 	}
 }

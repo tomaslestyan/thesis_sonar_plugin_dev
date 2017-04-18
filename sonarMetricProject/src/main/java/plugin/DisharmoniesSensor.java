@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.Phase;
+import org.sonar.api.batch.DependsUpon;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
@@ -16,7 +16,7 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 
-import main.java.framework.api.components.ComponentFactory;
+import main.java.framework.api.Database;
 import main.java.framework.api.components.IComponent;
 import main.java.tresholds.IThresholds;
 import main.java.tresholds.ThresholdFactory;
@@ -26,7 +26,7 @@ import main.java.tresholds.ThresholdFactory;
  * Disharmonies detection sensor
  * @author Tomas Lestyan
  */
-@Phase(name = Phase.Name.POST)
+@DependsUpon("squid")
 public class DisharmoniesSensor implements Sensor {
 
 	/** The file system of the analyzed project */
@@ -42,8 +42,8 @@ public class DisharmoniesSensor implements Sensor {
 	 */
 	public DisharmoniesSensor(FileSystem fileSystem) {
 		this.fileSystem = fileSystem;
-		this.thresholds = ThresholdFactory.getTresholds();
-		components = ComponentFactory.getClassComponents();
+		this.thresholds = ThresholdFactory.getThresholds();
+		components = Database.getClassComponents();
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +59,7 @@ public class DisharmoniesSensor implements Sensor {
 	 */
 	@Override
 	public void execute(SensorContext context) {
-		log.info("Disharmonies sensor statrted");	
+		log.info("Disharmonies sensor statrted");
 		Iterable<InputFile> inputFiles = fileSystem.inputFiles(fileSystem.predicates().all());
 		inputFiles.forEach(x ->{
 			Stream<IComponent> componentsOfFile = components.stream().filter(c -> FilenameUtils.equalsNormalized( c.getSonarComponentID(), x.absolutePath()));

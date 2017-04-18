@@ -10,7 +10,7 @@ import org.sonar.plugins.java.api.JavaFileScannerContext;
 import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
 import org.sonar.plugins.java.api.tree.MethodTree;
 
-import main.java.framework.api.components.ComponentFactory;
+import main.java.framework.api.Database;
 import main.java.framework.api.components.IComponent;
 import main.java.tresholds.IThresholds;
 import main.java.tresholds.ThresholdFactory;
@@ -26,8 +26,8 @@ public class BrainMethod extends BaseTreeVisitor implements IDisharmony {
 	static final String BRAIN_METHOD_NAME = "Brain method";
 	static final String BRAIN_METHOD_DESCRIPTION = "Brain Methods tend to centralize the functionality of a class, in the same way as a God Class centralizes the functionality of an entire subsystem, or sometimes even a whole system.";
 	private JavaFileScannerContext context;
-	private final IThresholds tresholds = ThresholdFactory.getTresholds();
-	private Collection<IComponent> components = ComponentFactory.getComponents();
+	private final IThresholds tresholds = ThresholdFactory.getThresholds();
+	private Collection<IComponent> components = Database.getComponents();
 
 	/* (non-Javadoc)
 	 * @see main.java.disharmonies.IDisharmony#getKey()

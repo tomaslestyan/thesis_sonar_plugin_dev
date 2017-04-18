@@ -67,10 +67,10 @@
 		<scope>2</scope>
 		<disharmonyDetection>
 			<and>
-				<metric name="loc" compare="&gt;" value="50" modifier="/2" />
-				<metric name="noav" compare="&gt;" value="5" />
-				<metric name="cyclo" compare="&gt;=" value="10" />
-				<metric name="maxnesting" compare="&gt;=" value="3" />
+				<metric name="loc_class" compare="&gt;" semantic="0.75" modifier="/2" />
+				<metric name="noav" compare="&gt;" semantic="0.66" />
+				<metric name="cyclo" compare="&gt;=" semantic="0.75" />
+				<metric name="maxnesting" compare="&gt;=" semantic="0.33" />
 			</and>
 		</disharmonyDetection>
 	</rule>

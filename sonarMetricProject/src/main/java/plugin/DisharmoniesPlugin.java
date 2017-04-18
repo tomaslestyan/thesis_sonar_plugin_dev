@@ -50,4 +50,8 @@ public class DisharmoniesPlugin implements Plugin {
 				DisharmoniesSensor.class);
 	}
 
+	public static void main(String[] args) {
+		new DisharmoniesPlugin();
+	}
+
 }
