@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.framework.api.Database;
+import main.java.framework.api.MeasurementRepository;
 import main.java.framework.api.metrics.MetricsRegister;
 
 /**
@@ -45,7 +45,7 @@ public class GlobalThresholds implements IThresholds {
 
 	private GlobalThresholds() {
 		long timeBefore = System.currentTimeMillis();
-		Map<String, List<Integer>> measures = Database.getMeasures(MetricsRegister.getFrameworkMetrics().stream().map(x -> x.getKey()).collect(Collectors.toList()));
+		Map<String, List<Integer>> measures = MeasurementRepository.getMeasures(MetricsRegister.getFrameworkMetrics().stream().map(x -> x.getKey()).collect(Collectors.toList()));
 		this.sortedMeasures = getSortedMeasures(measures);
 		long timeAfter = System.currentTimeMillis();
 		log.info(String.format("Retrieving tresholds from DB taken %d ms", timeBefore - timeAfter ));

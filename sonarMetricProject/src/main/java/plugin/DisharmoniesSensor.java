@@ -1,9 +1,8 @@
 package main.java.plugin;
 
+import java.io.File;
 import java.util.Collection;
-import java.util.stream.Stream;
 
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.DependsUpon;
@@ -16,7 +15,8 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 
-import main.java.framework.api.Database;
+import main.java.framework.api.MeasurementRepository;
+import main.java.framework.api.components.ClassComponent;
 import main.java.framework.api.components.IComponent;
 import main.java.tresholds.IThresholds;
 import main.java.tresholds.ThresholdFactory;
@@ -33,8 +33,8 @@ public class DisharmoniesSensor implements Sensor {
 	private final FileSystem fileSystem;
 	/** The logger object */
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	/** The thresholds from DB */
 	private final IThresholds thresholds;
-	private Collection<IComponent> components;
 
 	/**
 	 * Constructor
@@ -43,7 +43,6 @@ public class DisharmoniesSensor implements Sensor {
 	public DisharmoniesSensor(FileSystem fileSystem) {
 		this.fileSystem = fileSystem;
 		this.thresholds = ThresholdFactory.getThresholds();
-		components = Database.getClassComponents();
 	}
 
 	/* (non-Javadoc)
@@ -59,35 +58,42 @@ public class DisharmoniesSensor implements Sensor {
 	 */
 	@Override
 	public void execute(SensorContext context) {
-		log.info("Disharmonies sensor statrted");
-		Iterable<InputFile> inputFiles = fileSystem.inputFiles(fileSystem.predicates().all());
-		inputFiles.forEach(x ->{
-			Stream<IComponent> componentsOfFile = components.stream().filter(c -> FilenameUtils.equalsNormalized( c.getSonarComponentID(), x.absolutePath()));
-			componentsOfFile.forEach(z -> checkComponentForIssues(z, context, x));
-
-		});
-		log.info("Disharmonies sensor finished");
+		String module = context.module().key();
+		log.info("Disharmonies sensor statrted for module: " + module);
+		Collection<ClassComponent> components = MeasurementRepository.getClassComponents(module);
+		components.forEach(z -> checkComponentForIssues(z, context));
+		log.info("Disharmonies sensor finished for module: " + module);
 	}
 
-	private void checkComponentForIssues(IComponent component, SensorContext context, InputFile file) {
-		DisharmoniesContextSingleton.getInstance().getRules().forEach((k, v) -> {
-			if (DisharmonyChecker.checkDisharmony(v, component, thresholds)) {
-				NewIssue issue = context.newIssue()
-						.forRule(RuleKey.of( DisharmoniesRules.REPOSITORY, k));
-				NewIssueLocation primaryLocation = issue.newLocation()
-						.on(file)
-						.message(v.getDescription());
-				primaryLocation.at(file.selectLine(component.getStartLine()));
-				issue.at(primaryLocation);
-
-				issue.save();
+	/**
+	 * Check if components for disharmonies
+	 * @param component
+	 * @param context
+	 */
+	private void checkComponentForIssues(IComponent component, SensorContext context) {
+		DisharmoniesRules.getXmlRules().forEach(x -> {
+			if (DisharmonyChecker.checkDisharmony(x, component, thresholds)) {
+				File componentFile = new File(component.getFileKey());
+				if (componentFile.exists()) {
+					InputFile file = fileSystem.inputFile(fileSystem.predicates().is(componentFile));
+					NewIssue issue = context.newIssue()
+							.forRule(RuleKey.of( DisharmoniesRules.REPOSITORY, x.getKey()));
+					NewIssueLocation primaryLocation = issue.newLocation()
+							.on(file)
+							.message(x.getDescription());
+					primaryLocation.at(file.selectLine(component.getStartLine()));
+					issue.at(primaryLocation);
+					issue.save();
+				} else {
+					log.error(component + "not exists anymore");
+				}
 			}
 		});
 
 		// recursive execution for child components
 		Collection<IComponent> childComponents = component.getChildComponents();
 		if (childComponents != null && !childComponents.isEmpty()) {
-			childComponents.forEach(x -> checkComponentForIssues(x, context, file));
+			childComponents.forEach(x -> checkComponentForIssues(x, context));
 		} else {
 			return;
 		}

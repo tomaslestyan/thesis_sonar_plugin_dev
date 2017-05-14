@@ -3,18 +3,17 @@
  */
 package main.java.plugin;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.java.Java;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
+
+import main.java.disharmonies.parser.Disharmony;
 
 /**
  * @author Tomas Lestyan
@@ -25,16 +24,8 @@ public class DisharmoniesRules implements RulesDefinition {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	public static final String REPOSITORY = "disharmoniesRepository";
 	public static final RuleKey TEST_RULE_KEY = RuleKey.of(REPOSITORY, "test");
-	private final RulesDefinitionXmlLoader xmlLoader;
-	private final DisharmoniesContextSingleton contextSingleton  = DisharmoniesContextSingleton.getInstance();
+	private final static DisharmoniesRulesLoader xmlLoader = new DisharmoniesRulesLoader();
 
-	/**
-	 * Constructor
-	 * @param xmlLoader
-	 */
-	public DisharmoniesRules() {
-		this.xmlLoader = new RulesDefinitionXmlLoader();
-	}
 
 	/* (non-Javadoc)
 	 * @see org.sonar.api.server.rule.RulesDefinition#define(org.sonar.api.server.rule.RulesDefinition.Context)
@@ -44,16 +35,14 @@ public class DisharmoniesRules implements RulesDefinition {
 		NewRepository repository = context.createRepository(REPOSITORY, "java").setName("Disharmonies Rules repository");
 		new AnnotationBasedRulesDefinition(repository, Java.KEY).addRuleClasses(false, false, Arrays.asList(Checks.checkClasses()));
 		repository.done();
-		InputStream is = null;
-		try {
-			//load rules by sonarqube
-			is = contextSingleton.getXmlRulesLocation().openStream();
-			xmlLoader.load(repository, is, Charset.defaultCharset());
-			is.close();
-		} catch (IOException e) {
-			log.warn("Rules from xml not loaded properly", e);
-		}
+		xmlLoader.loadDisharmonyRulesIntoRepository(repository, DisharmoniesPlugin.RULES_URL);
 		repository.done();
 	}
 
+	/**
+	 * @return disharmony rules
+	 */
+	public static Collection<Disharmony> getXmlRules() {
+		return xmlLoader.getDisharmonyRules(DisharmoniesPlugin.RULES_URL);
+	}
 }

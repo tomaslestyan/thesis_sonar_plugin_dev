@@ -1,16 +1,14 @@
 package main.java.plugin;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collection;
+import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Plugin;
 
-import main.java.disharmonies.parser.Disharmony;
-import main.java.disharmonies.parser.DisharmonyParser;
+import main.java.framework.db.Configuration;
+import main.java.framework.db.DataSourceProvider;
 
 /**
  * The plugin definition
@@ -21,25 +19,19 @@ public class DisharmoniesPlugin implements Plugin {
 
 	/** The logger object */
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	public static final URL RULES_URL = DisharmoniesPlugin.class.getClassLoader().getResource("resources/testrule.xml");
+
+
 
 	/**
 	 * Constructor
 	 */
 	public DisharmoniesPlugin() {
-		DisharmoniesContextSingleton context = DisharmoniesContextSingleton.getInstance();
-		InputStream is = null;
-		try {
-			// load disharmony rules
-			ClassLoader classLoader = getClass().getClassLoader();
-			is = classLoader.getResourceAsStream("resources/testrule.xml");
-			context.setXmlRulesLocation(classLoader.getResource("resources/testrule.xml"));
-			Collection<Disharmony> rules = DisharmonyParser.parse(is);
-			context.addDisharmonyRules(rules);
-			is.close();
-		} catch (IOException e) {
-			log.warn("Rules from xml not loaded properly", e);
-		}
+		// get database configuration
+		Configuration configuration = Configuration.INSTANCE;
+		DataSourceProvider.setConfiguration(configuration);
 	}
+
 	/* (non-Javadoc)
 	 * @see org.sonar.api.Plugin#define(org.sonar.api.Plugin.Context)
 	 */
