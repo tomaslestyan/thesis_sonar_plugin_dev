@@ -6,7 +6,7 @@
 	<!-- Evaluation based on given exact values of thresholds -->
 <!-- 	<type>static</type> -->
 	
-	<!-- Definition of custom threshold semantics sectiob-->
+	<!-- Definition of custom threshold semantics section-->
 	<thresholdSemantic percentile="-1.00" value = "-1">UNKNOWN</thresholdSemantic>
 	<thresholdSemantic percentile="0.00" value = "0">ZERO</thresholdSemantic>
 	<thresholdSemantic percentile="0.07" value = "2">FEW</thresholdSemantic>

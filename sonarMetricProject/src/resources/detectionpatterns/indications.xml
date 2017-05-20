@@ -1,0 +1,54 @@
+<rules>
+	<rule>
+		<key>locTooHigh</key>
+		<name>Loc Too High</name>
+		<description>
+			Loc Too High
+		</description>
+		<severity>MINOR</severity>
+		<type>CODE_SMELL</type>
+		<scope>2</scope>
+		<disharmonyDetection>
+			<metric name="loc" compare="&gt;" semantic="HIGH" />
+		</disharmonyDetection>
+	</rule>
+	<rule>
+		<key>ClassLocTooHigh</key>
+		<name>Class Loc Too High</name>
+		<description>
+			Class Loc Too High
+		</description>
+		<severity>MINOR</severity>
+		<type>CODE_SMELL</type>
+		<scope>1</scope>
+		<disharmonyDetection>
+			<metric name="loc" compare="&gt;" semantic="HIGH" />
+		</disharmonyDetection>
+	</rule>
+	<rule>
+		<key>noavTooHigh</key>
+		<name>Noav Too High</name>
+		<description>
+			Noav Too High
+		</description>
+		<severity>MINOR</severity>
+		<type>CODE_SMELL</type>
+		<scope>2</scope>
+		<disharmonyDetection>
+			<metric name="noav" compare="&gt;" semantic="HIGH" />
+		</disharmonyDetection>
+	</rule>
+	<rule>
+		<key>cycloTooHigh</key>
+		<name>Cyclo Too High</name>
+		<description>
+			Cyclo Too High
+		</description>
+		<severity>MINOR</severity>
+		<type>CODE_SMELL</type>
+		<scope>2</scope>
+		<disharmonyDetection>
+			<metric name="cyclo" compare="&gt;=" semantic="HIGH" />
+		</disharmonyDetection>
+	</rule>
+</rules>

@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.ExtensionPoint;
 import org.sonar.api.Plugin;
 
 import main.java.framework.db.Configuration;
@@ -15,11 +16,13 @@ import main.java.framework.db.DataSourceProvider;
  * TODO under construction - add each new class
  * @author Tomas Lestyan
  */
+@ExtensionPoint
 public class DisharmoniesPlugin implements Plugin {
 
 	/** The logger object */
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	public static final URL RULES_URL = DisharmoniesPlugin.class.getClassLoader().getResource("resources/testrule.xml");
+	public static final URL RULES_URL = DisharmoniesPlugin.class.getClassLoader().getResource("resources/detectionpatterns/");
+	public static final URL THRESHOLDS_URL = DisharmoniesPlugin.class.getClassLoader().getResource("resources/thresholds/thresholds.xml");
 
 
 
@@ -41,9 +44,4 @@ public class DisharmoniesPlugin implements Plugin {
 				DisharmoniesRules.class,
 				DisharmoniesSensor.class);
 	}
-
-	public static void main(String[] args) {
-		new DisharmoniesPlugin();
-	}
-
 }
