@@ -15,6 +15,7 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 
+import main.java.disharmonies.parser.Disharmony;
 import main.java.framework.api.MeasurementRepository;
 import main.java.framework.api.components.ClassComponent;
 import main.java.framework.api.components.IComponent;
@@ -35,6 +36,7 @@ public class DisharmoniesSensor implements Sensor {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	/** The thresholds from DB */
 	private final IThresholds thresholds;
+	Collection<Disharmony> xmlRules;
 
 	/**
 	 * Constructor
@@ -43,6 +45,7 @@ public class DisharmoniesSensor implements Sensor {
 	public DisharmoniesSensor(FileSystem fileSystem) {
 		this.fileSystem = fileSystem;
 		this.thresholds = ThresholdFactory.getThresholds();
+		this.xmlRules = DisharmoniesRules.getXmlRules();
 	}
 
 	/* (non-Javadoc)
@@ -71,16 +74,16 @@ public class DisharmoniesSensor implements Sensor {
 	 * @param context
 	 */
 	private void checkComponentForIssues(IComponent component, SensorContext context) {
-		DisharmoniesRules.getXmlRules().forEach(x -> {
+		xmlRules.forEach(x -> {
 			if (DisharmonyChecker.checkDisharmony(x, component, thresholds)) {
-				File componentFile = new File(component.getFileKey());
+				File componentFile = new File(component.getSonarFileKey());
 				if (componentFile.exists()) {
 					InputFile file = fileSystem.inputFile(fileSystem.predicates().is(componentFile));
 					NewIssue issue = context.newIssue()
 							.forRule(RuleKey.of( DisharmoniesRules.REPOSITORY, x.getKey()));
 					NewIssueLocation primaryLocation = issue.newLocation()
 							.on(file)
-							.message(x.getDescription());
+							.message(x.getMessage());
 					primaryLocation.at(file.selectLine(component.getStartLine()));
 					issue.at(primaryLocation);
 					issue.save();

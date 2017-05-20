@@ -3,14 +3,13 @@
  */
 package main.java.tresholds;
 
-import static main.java.tresholds.TresholdRegister.CLASS_LOC_HIGH;
-import static main.java.tresholds.TresholdRegister.CYCLO_HIGH;
-import static main.java.tresholds.TresholdRegister.MAXNESTING_SEVERAL;
-import static main.java.tresholds.TresholdRegister.NOAV_MANY;
-
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
+import main.java.disharmonies.parser.Semantic;
+import main.java.framework.api.metrics.MetricsRegister;
+import main.java.tresholds.Threshold.Builder;
 
 /**
  * @author Tomas Lestyan
@@ -20,12 +19,7 @@ public class StaticThresholds implements IThresholds {
 	/** The singleton instance*/
 	private static volatile StaticThresholds INSTANCE;
 
-	private final Map<String, Integer> tresholds = ImmutableMap.<String, Integer>builder().
-			put(CLASS_LOC_HIGH, 50).
-			put(CYCLO_HIGH, 10).
-			put(MAXNESTING_SEVERAL, 3).
-			put(NOAV_MANY, 5).
-			build();
+	private Map<String, Threshold> thresholds = new HashMap<>();
 
 	/**
 	 * TODO
@@ -41,25 +35,42 @@ public class StaticThresholds implements IThresholds {
 		return INSTANCE;
 	}
 
-	private StaticThresholds() {
-		// Do not allow to create instances
-	}
 
 	/* (non-Javadoc)
-	 * @see main.java.tresholds.Tresholds#getTresholdValueOf(java.lang.String)
+	 * @see main.java.tresholds.IThresholds#getTresholdValueOf(java.lang.String, main.java.tresholds.PercentileSemantics)
 	 */
 	@Override
-	public int getTresholdValueOf(String metricID) {
-		Integer treshold = tresholds.get(metricID);
-		if (treshold != null) {
-			return treshold.intValue();
+	public int getTresholdValueOf(String metricID, String semantics) {
+		Threshold threshold = thresholds.get(metricID);
+		if (threshold != null) {
+			return threshold.getThresholdValue(semantics);
 		}
 		return -1;
 	}
 
+	/* (non-Javadoc)
+	 * @see main.java.tresholds.IThresholds#getTresholdValueOf(java.lang.String, double)
+	 */
 	@Override
-	public int getTresholdValueOf(String key, double percentile) {
-		return getTresholdValueOf(key);
+	public int getTresholdValueOf(String metricID, double percentile) {
+		// Not supported
+		return -1;
+	}
+
+	/* (non-Javadoc)
+	 * @see main.java.tresholds.IThresholds#init(java.util.Collection)
+	 */
+	@Override
+	public void init(Collection<Semantic> semantics) {
+		MetricsRegister.getFrameworkMetrics().forEach(m -> {
+			String metricKey = m.getKey();
+			Builder thresholdbuilder = Threshold.getBuilder(metricKey);
+			semantics.forEach(s -> {
+				thresholdbuilder.addValue(s.getSemantic(), s.getValueAsInt());
+			});
+			thresholds.put(metricKey, thresholdbuilder.build());
+		});
+
 	}
 
 }

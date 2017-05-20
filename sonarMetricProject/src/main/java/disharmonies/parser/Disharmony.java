@@ -27,6 +27,8 @@ public class Disharmony implements IDisharmony{
 	private String key;
 	@XmlElement
 	private String description;
+	@XmlElement
+	private String message;
 	@XmlElement(name = "disharmonyDetection")
 	private DisharmonyDetection detection;
 
@@ -64,14 +66,37 @@ public class Disharmony implements IDisharmony{
 		return description;
 	}
 
+	/**
+	 * @param description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * @return the scope
+	 */
 	public String getScope() {
 		return scope;
 	}
 
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @param scope
+	 */
 	public void setScope(String scope) {
 		this.scope = scope;
 	}

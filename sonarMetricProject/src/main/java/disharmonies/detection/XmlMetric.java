@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.tresholds.IThresholds;
-import main.java.tresholds.PercentileSemantics;
 
 /**
  * Metric parsed from XML definition
@@ -40,23 +39,20 @@ public class XmlMetric extends AMetric implements IDisharmonyDetectionBlock {
 	 */
 	public int getTresholdValue(IThresholds tresholds, String metricID) {
 		Modifier m = new Modifier(modifier);
-		PercentileSemantics percentileSemantic = PercentileSemantics.getSemantic(semantic);
 		int tresholdValue = 0;
-		if (!percentileSemantic.equals(PercentileSemantics.NOT_VALID)) {
+		if (semantic != null && !semantic.isEmpty()) {
 			// using semantic variables e.g HIGH, LOW, AVERAGE ...
-			tresholdValue = tresholds.getTresholdValueOf(metricID, percentileSemantic.getValue());
+			tresholdValue = tresholds.getTresholdValueOf(metricID, semantic);
 		} else if (value != null) {
 			// using given value
 			try {
-				tresholdValue =Integer.parseInt(value);
+				tresholdValue = Integer.parseInt(value);
 			} catch (NumberFormatException e) {
 				log.warn(value + "is not valid integer");
 			}
 		} else {
-			// using the default threshold value
-			// WARNING this can be different in each threshold implementation
-			// do not use
-			tresholds.getTresholdValueOf(metricID);
+			log.error("Detection pattern for metric: " + metricID + "contains errors");
+			tresholdValue = -1;
 		}
 		return m.modify(tresholdValue);
 	}

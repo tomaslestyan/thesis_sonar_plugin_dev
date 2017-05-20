@@ -4,6 +4,7 @@
  */
 package main.java.tresholds;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import main.java.disharmonies.parser.Semantic;
 import main.java.framework.api.MeasurementRepository;
 import main.java.framework.api.metrics.MetricsRegister;
+import main.java.tresholds.Threshold.Builder;
 
 /**
  * TODO
@@ -28,6 +31,7 @@ public class GlobalThresholds implements IThresholds {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	/** Sorted measures grouped by their parent metrics */
 	Map<String, List<Integer>> sortedMeasures;
+	private Map<String, Threshold> thresholds = new HashMap<>();
 
 	/**
 	 * TODO
@@ -43,14 +47,21 @@ public class GlobalThresholds implements IThresholds {
 		return INSTANCE;
 	}
 
+	/**
+	 * Constructor
+	 */
 	private GlobalThresholds() {
-		long timeBefore = System.currentTimeMillis();
-		Map<String, List<Integer>> measures = MeasurementRepository.getMeasures(MetricsRegister.getFrameworkMetrics().stream().map(x -> x.getKey()).collect(Collectors.toList()));
+		Map<String, List<Integer>> measures = MeasurementRepository
+				.getMeasures(MetricsRegister.getFrameworkMetrics().stream()
+						.map(x -> x.getKey())
+						.collect(Collectors.toList()));
 		this.sortedMeasures = getSortedMeasures(measures);
-		long timeAfter = System.currentTimeMillis();
-		log.info(String.format("Retrieving tresholds from DB taken %d ms", timeBefore - timeAfter ));
 	}
 
+	/**
+	 * @param measures
+	 * @return
+	 */
 	private Map<String, List<Integer>> getSortedMeasures(Map<String, List<Integer>> measures) {
 		Map<String, List<Integer>> result = new HashMap<>();
 		measures.forEach((k, v) -> {
@@ -61,23 +72,44 @@ public class GlobalThresholds implements IThresholds {
 	}
 
 	/* (non-Javadoc)
-	 * @see main.java.tresholds.Tresholds#getTresholdValueOf(java.lang.String)
-	 */
-	@Override
-	public int getTresholdValueOf(String metricID) {
-		return getTresholdValueOf(metricID, PercentileSemantics.AVERAGE.getValue()); 
-	}
-
-	/* (non-Javadoc)
 	 * @see main.java.tresholds.ITresholds#getTresholdValueOf(java.lang.String, double)
 	 */
 	@Override
 	public int getTresholdValueOf(String metricID, double percentile) {
-		List<Integer> measures = sortedMeasures.get(metricID);
-		if ((measures != null) && !measures.isEmpty()) {
-			int index = (int) (measures.size() * percentile);
-			return measures.get(index);
+		if (percentile >=  0.00 ) {
+			List<Integer> measures = sortedMeasures.get(metricID);
+			if ((measures != null) && !measures.isEmpty()) {
+				int index = (int) (measures.size() * percentile);
+				return measures.get(index);
+			}
 		}
 		return -1;
+	}
+
+	/* (non-Javadoc)
+	 * @see main.java.tresholds.IThresholds#getTresholdValueOf(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int getTresholdValueOf(String metricID, String semantics) {
+		Threshold threshold = thresholds.get(metricID);
+		if (threshold != null) {
+			return threshold.getThresholdValue(semantics);
+		}
+		return -1;
+	}
+
+	/* (non-Javadoc)
+	 * @see main.java.tresholds.IThresholds#init(java.util.Collection)
+	 */
+	@Override
+	public void init(Collection<Semantic> semantics) {
+		MetricsRegister.getFrameworkMetrics().forEach(m -> {
+			String metricKey = m.getKey();
+			Builder thresholdbuilder = Threshold.getBuilder(metricKey);
+			semantics.forEach(s -> {
+				thresholdbuilder.addValue(s.getSemantic(), getTresholdValueOf(metricKey, s.getPercentileAsDouble()));
+			});
+			thresholds.put(metricKey, thresholdbuilder.build());
+		});
 	}
 }

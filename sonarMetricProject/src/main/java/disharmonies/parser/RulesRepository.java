@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name="rules")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlRules {
+public class RulesRepository {
 
 	@XmlElement(name = "rule")
 	private Collection<Disharmony> disharmonies = null;

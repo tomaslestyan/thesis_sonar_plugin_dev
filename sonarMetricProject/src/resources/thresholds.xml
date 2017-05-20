@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thresholds>
+	<!-- Type of the threshold evaluation -->
+	<!-- Statistical evaluation based on data from previous measurements -->
+	<type>statistical</type>
+	<!-- Evaluation based on given exact values of thresholds -->
+<!-- 	<type>static</type> -->
+	
+	<!-- Definition of custom threshold semantics sectiob-->
+	<thresholdSemantic percentile="-1.00" value = "-1">UNKNOWN</thresholdSemantic>
+	<thresholdSemantic percentile="0.00" value = "0">ZERO</thresholdSemantic>
+	<thresholdSemantic percentile="0.07" value = "2">FEW</thresholdSemantic>
+	<thresholdSemantic percentile="0.25" value = "3">LOW</thresholdSemantic>
+	<thresholdSemantic percentile="0.25" value = "3">ONE_QUARTER</thresholdSemantic>
+	<thresholdSemantic percentile="0.33" value = "3">SEVERAL</thresholdSemantic>
+	<thresholdSemantic percentile="0.33" value = "3">SHALLOW</thresholdSemantic>
+	<thresholdSemantic percentile="0.33" value = "3">ONE_THIRD</thresholdSemantic>
+	<thresholdSemantic percentile="0.5" value = "5">AVERAGE</thresholdSemantic>
+	<thresholdSemantic percentile="0.5" value = "5">HALF</thresholdSemantic>
+	<thresholdSemantic percentile="0.66" value = "10">MANY</thresholdSemantic>
+	<thresholdSemantic percentile="0.66" value = "10">TWO_THIRDS</thresholdSemantic>
+	<thresholdSemantic percentile="0.75" value = "12">HIGH</thresholdSemantic>
+	<thresholdSemantic percentile="0.75" value = "12">THREE_QUARTERS</thresholdSemantic>
+	<thresholdSemantic percentile="0.93" value = "15">VERY_HIGH</thresholdSemantic>
+	<thresholdSemantic percentile="0.85" value = "50">HIGH (Class)</thresholdSemantic>
+</thresholds>

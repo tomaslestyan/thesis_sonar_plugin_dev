@@ -38,11 +38,11 @@ public class DisharmonyParser {
 	 * @return collection of disharmonies
 	 */
 	public static Collection<Disharmony> parse(InputStream is) {
-		XmlRules rules = null;
+		RulesRepository rules = null;
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(XmlRules.class, DisharmonyDetectionBlockFactory.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(RulesRepository.class, DisharmonyDetectionBlockFactory.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			rules = (XmlRules) jaxbUnmarshaller.unmarshal(is);
+			rules = (RulesRepository) jaxbUnmarshaller.unmarshal(is);
 		  } catch (JAXBException e) {
 			LoggerFactory.getLogger(DisharmonyParser.class).warn("Parsing failed", e);
 		  }

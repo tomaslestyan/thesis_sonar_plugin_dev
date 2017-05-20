@@ -49,7 +49,7 @@ public class DisharmoniesRulesLoader extends RulesDefinitionXmlLoader{
 		Collection<Disharmony> rules = new ArrayList<>();
 		try (InputStream is = rulesLocation.openStream()) {
 			rules = DisharmonyParser.parse(is);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.warn("Rules from xml not loaded properly", e);
 		}
 		return rules;
