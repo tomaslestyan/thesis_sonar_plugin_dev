@@ -30,14 +30,14 @@ public class DisharmonyParser {
 	}
 
 	/** The logger object */
-	private final static Logger log = LoggerFactory.getLogger(DisharmonyParser.class)
+	private final static Logger log = LoggerFactory.getLogger(DisharmonyParser.class);
 
-			/**
-			 * Parse the disharmonies from input stream
-			 * @param is
-			 * @return collection of disharmonies
-			 */
-			public static Collection<Disharmony> parse(InputStream is) {
+	/**
+	 * Parse the disharmonies from input stream
+	 * @param is
+	 * @return collection of disharmonies
+	 */
+	public static Collection<Disharmony> parse(InputStream is) {
 		RulesRepository rules = null;
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(RulesRepository.class, DisharmonyDetectionBlockFactory.class);

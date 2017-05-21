@@ -5,7 +5,6 @@
   <name>Disharmonies checker</name>
     <groupId>tlestyan.thesis</groupId>
     <artifactId>disharmonies</artifactId>
-    <version>0.5</version>
   <packaging>sonar-plugin</packaging>
 
   <properties>
@@ -251,4 +250,5 @@
      </plugins>
   </build>
 
+  <version>1.0.0</version>
 </project>
