@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  * Copyright (c) 2016 Tomas Lestyan
  */
-package main.java.disharmonies.parser;
+package main.java.parser;
 
 import java.util.Collection;
 
@@ -11,10 +11,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * TODO
- * @author Tomas Lestyan
- */
 /**
  * XML rules class
  * @author Tomas Lestyan
@@ -26,10 +22,17 @@ public class RulesRepository {
 	@XmlElement(name = "rule")
 	private Collection<Disharmony> disharmonies = null;
 
+	/**
+	 * @return disharmonies
+	 */
 	public Collection<Disharmony> getDisharmonies() {
 		return disharmonies;
 	}
 
+	/**
+	 * Set disharmonies
+	 * @param disharmonies
+	 */
 	public void setDisharmonies(Collection<Disharmony> disharmonies) {
 		this.disharmonies = disharmonies;
 	}

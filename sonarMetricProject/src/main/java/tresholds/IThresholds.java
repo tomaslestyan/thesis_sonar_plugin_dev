@@ -6,7 +6,7 @@ package main.java.tresholds;
 
 import java.util.Collection;
 
-import main.java.disharmonies.parser.Semantic;
+import main.java.parser.Semantic;
 
 /**
  * Interface of thresholds handling classes

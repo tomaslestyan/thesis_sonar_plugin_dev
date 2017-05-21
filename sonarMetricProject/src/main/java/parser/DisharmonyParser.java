@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  * Copyright (c) 2016 Tomas Lestyan
  */
-package main.java.disharmonies.parser;
+package main.java.parser;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,22 +30,22 @@ public class DisharmonyParser {
 	}
 
 	/** The logger object */
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final static Logger log = LoggerFactory.getLogger(DisharmonyParser.class)
 
-	/**
-	 * Parse the disharmonies from input stream
-	 * @param is
-	 * @return collection of disharmonies
-	 */
-	public static Collection<Disharmony> parse(InputStream is) {
+			/**
+			 * Parse the disharmonies from input stream
+			 * @param is
+			 * @return collection of disharmonies
+			 */
+			public static Collection<Disharmony> parse(InputStream is) {
 		RulesRepository rules = null;
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(RulesRepository.class, DisharmonyDetectionBlockFactory.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			rules = (RulesRepository) jaxbUnmarshaller.unmarshal(is);
-		  } catch (JAXBException e) {
-			LoggerFactory.getLogger(DisharmonyParser.class).warn("Parsing failed", e);
-		  }
+		} catch (JAXBException e) {
+			log.warn("Parsing failed", e);
+		}
 		return (rules != null) ? rules.getDisharmonies() : new ArrayList<>();
 	}
 

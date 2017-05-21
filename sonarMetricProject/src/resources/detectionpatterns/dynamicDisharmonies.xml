@@ -11,12 +11,7 @@
 			subsystem, or sometimes even a whole system.
 		</description>
 		<message>
-			Potential occurrence of Brain Method anomaly found. This anomaly
-			occurs when:
-			Method is excessively large
-			Method has many conditional branches
-			Method has deep nesting level
-			Method uses many variables
+			Potential occurrence of Brain Method anomaly found.
 		</message>
 		<scope>2</scope>
 		<disharmonyDetection>
@@ -29,8 +24,37 @@
 		</disharmonyDetection>
 		<!-- optional tags -->
 		<tag>disharmony</tag>
-	    <remediationFunctionGapMultiplier>15min</remediationFunctionGapMultiplier>
-	    <remediationFunctionBaseEffort>30min</remediationFunctionBaseEffort>
+		<remediationFunctionGapMultiplier>15min
+		</remediationFunctionGapMultiplier>
+		<remediationFunctionBaseEffort>30min</remediationFunctionBaseEffort>
+		<severity>MAJOR</severity>
+		<type>CODE_SMELL</type>
+	</rule>
+	<rule>
+		<key>godClass</key>
+		<name>God Class (dynamic values)</name>
+		<description>
+			God Class is potentially harmful to a system’s design
+			because it is
+			an aggregation of different abstractions and (mis)use other classes
+			(often mere data holder) to perform its functionality.
+		</description>
+		<message>
+			Potential occurrence of God Class anomaly found.
+		</message>
+		<scope>1</scope>
+		<disharmonyDetection>
+			<and>
+				<metric name="atfd_class" compare="&gt;" semantic="FEW" />
+				<metric name="wmc" compare="&lt;" semantic="VERY_HIGH" />
+				<metric name="tcc" compare="&lt;=" semantic="ONE_THIRD" />
+			</and>
+		</disharmonyDetection>
+		<!-- optional tags -->
+		<tag>disharmony</tag>
+		<remediationFunctionGapMultiplier>15min
+		</remediationFunctionGapMultiplier>
+		<remediationFunctionBaseEffort>45min</remediationFunctionBaseEffort>
 		<severity>MAJOR</severity>
 		<type>CODE_SMELL</type>
 	</rule>

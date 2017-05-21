@@ -15,10 +15,10 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 
-import main.java.disharmonies.parser.Disharmony;
 import main.java.framework.api.MeasurementRepository;
 import main.java.framework.api.components.ClassComponent;
 import main.java.framework.api.components.IComponent;
+import main.java.parser.Disharmony;
 import main.java.tresholds.IThresholds;
 import main.java.tresholds.ThresholdFactory;
 

@@ -10,8 +10,8 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.disharmonies.parser.ThresholdParser;
-import main.java.disharmonies.parser.ThresholdsRepository;
+import main.java.parser.ThresholdParser;
+import main.java.parser.ThresholdsRepository;
 import main.java.plugin.DisharmoniesPlugin;
 
 /**

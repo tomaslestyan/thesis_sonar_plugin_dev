@@ -11,17 +11,8 @@
 			subsystem, or sometimes even a whole system.
 		</description>
 		<message>
-			Potential occurrence of Brain Method anomaly found. This anomaly
-			occurs when:
-			<ul>
-				<li>Method is excessively large</li>
-				<li>Method has many conditional branches</li>
-				<li>Method has deep nesting level</li>
-				<li>Method uses many variables</li>
-			</ul>
+			Potential occurrence of Brain Method anomaly found.
 		</message>
-		<severity>MAJOR</severity>
-		<type>CODE_SMELL</type>
 		<scope>2</scope>
 		<disharmonyDetection>
 			<and>
@@ -31,5 +22,12 @@
 				<metric name="maxnesting" compare="&gt;=" value="3" />
 			</and>
 		</disharmonyDetection>
+		<!-- optional tags -->
+		<tag>disharmony</tag>
+		<remediationFunctionGapMultiplier>15min
+		</remediationFunctionGapMultiplier>
+		<remediationFunctionBaseEffort>30min</remediationFunctionBaseEffort>
+		<severity>MAJOR</severity>
+		<type>CODE_SMELL</type>
 	</rule>
 </rules>

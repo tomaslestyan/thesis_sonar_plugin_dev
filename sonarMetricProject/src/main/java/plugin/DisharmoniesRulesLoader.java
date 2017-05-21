@@ -25,10 +25,11 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition.NewRepository;
-import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 
-import main.java.disharmonies.parser.Disharmony;
-import main.java.disharmonies.parser.DisharmonyParser;
+import main.java.parser.Disharmony;
+import main.java.parser.DisharmonyParser;
+
+import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 
 /**
  * TODO

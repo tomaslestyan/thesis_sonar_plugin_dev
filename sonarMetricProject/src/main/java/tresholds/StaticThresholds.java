@@ -7,8 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import main.java.disharmonies.parser.Semantic;
 import main.java.framework.api.metrics.MetricsRegister;
+import main.java.parser.Semantic;
 import main.java.tresholds.Threshold.Builder;
 
 /**

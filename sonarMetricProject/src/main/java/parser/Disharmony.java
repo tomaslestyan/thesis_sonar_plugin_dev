@@ -1,4 +1,4 @@
-package main.java.disharmonies.parser;
+package main.java.parser;
 
 import java.util.Map;
 

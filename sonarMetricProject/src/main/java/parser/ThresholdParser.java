@@ -2,21 +2,24 @@
  * The MIT License (MIT)
  * Copyright (c) 2016 Tomas Lestyan
  */
-package main.java.disharmonies.parser;
+package main.java.parser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Tomas Lestyan
  */
 public class ThresholdParser {
+
+	/** The logger of the class */
+	private final static Logger log = LoggerFactory.getLogger(ThresholdParser.class);
 
 	/**
 	 * Constructor
@@ -26,6 +29,11 @@ public class ThresholdParser {
 	}
 
 
+	/**
+	 * Parse thresholds from XML file
+	 * @param is
+	 * @return
+	 */
 	public static ThresholdsRepository parse(InputStream is) {
 		ThresholdsRepository thresholds = null;
 		try {
@@ -33,12 +41,8 @@ public class ThresholdParser {
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			thresholds = (ThresholdsRepository) jaxbUnmarshaller.unmarshal(is);
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			log.error("Threshold parsing failed", e);
 		}
 		return thresholds;
-	}
-
-	public static void main(String[] args) throws FileNotFoundException {
-		parse(new FileInputStream(new File("D:\\developement\\thesis_sonar_plugin_dev\\sonarMetricProject\\src\\resources\\thresholds.xml")));
 	}
 }

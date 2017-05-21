@@ -5,9 +5,6 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import main.java.tresholds.IThresholds;
 
 /**
@@ -16,9 +13,6 @@ import main.java.tresholds.IThresholds;
  */
 @XmlRootElement (name = "metric")
 public class XmlMetric extends AMetric implements IDisharmonyDetectionBlock {
-
-	/** The logger object */
-	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@XmlAttribute
 	private String name;

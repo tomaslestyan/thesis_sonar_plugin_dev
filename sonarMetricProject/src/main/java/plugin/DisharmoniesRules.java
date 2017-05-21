@@ -13,7 +13,7 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.java.Java;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
-import main.java.disharmonies.parser.Disharmony;
+import main.java.parser.Disharmony;
 
 /**
  * @author Tomas Lestyan
@@ -24,7 +24,7 @@ public class DisharmoniesRules implements RulesDefinition {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	public static final String REPOSITORY = "disharmoniesRepository";
 	public static final RuleKey TEST_RULE_KEY = RuleKey.of(REPOSITORY, "test");
-	private final static DisharmoniesRulesLoader xmlLoader = new DisharmoniesRulesLoader();
+	private static final  DisharmoniesRulesLoader xmlLoader = new DisharmoniesRulesLoader();
 
 
 	/* (non-Javadoc)
@@ -37,12 +37,13 @@ public class DisharmoniesRules implements RulesDefinition {
 		repository.done();
 		xmlLoader.loadDisharmonyRulesIntoRepository(repository, DisharmoniesPlugin.RULES_URL);
 		repository.done();
+		log.info("Disharmony rules loaded properly");
 	}
 
 	/**
 	 * @return disharmony rules
 	 */
 	public static Collection<Disharmony> getXmlRules() {
-		return xmlLoader.getDisharmonyRules(DisharmoniesPlugin.RULES_URL);
+		return DisharmoniesRulesLoader.getDisharmonyRules(DisharmoniesPlugin.RULES_URL);
 	}
 }

@@ -2,7 +2,7 @@
  * The MIT License (MIT)
  * Copyright (c) 2016 Tomas Lestyan
  */
-package main.java.disharmonies.parser;
+package main.java.parser;
 
 import java.util.Collection;
 
@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * TODO
+ * Repository of thresholds configuration
  * @author Tomas Lestyan
  */
 @XmlRootElement(name="thresholds")

@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
  * Abstract class for metrics definitions
  * @author Tomas Lestyan
  */
-//TODO Separate helper classes and delete this one
 public abstract class AMetric {
 
 	/** The logger object */
@@ -98,6 +97,10 @@ public abstract class AMetric {
 		}
 	}
 
+	/**
+	 * Modifier operator representation
+	 * @author Tomas
+	 */
 	public class Modifier {
 
 		private String operator = null;
@@ -121,9 +124,9 @@ public abstract class AMetric {
 						parameter = m.group(0);
 					}
 				} catch (Exception e) {
+					log.warn(value + " is not valid modifier");
 					operator = null;
 					parameter = null;
-					log.warn(value + " is not valid modifier");
 				}
 			}
 		}
@@ -134,7 +137,9 @@ public abstract class AMetric {
 		 * @return the modified value
 		 */
 		public int modify(int value) {
-			if ((operator == null ) || (parameter == null)) return value;
+			if ((operator == null ) || (parameter == null)) {
+				return value;
+			}
 			int result = value;
 			int param = 0;
 			try {

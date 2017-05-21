@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.disharmonies.parser.Semantic;
 import main.java.framework.api.MeasurementRepository;
 import main.java.framework.api.metrics.MetricsRegister;
+import main.java.parser.Semantic;
 import main.java.tresholds.Threshold.Builder;
 
 /**
